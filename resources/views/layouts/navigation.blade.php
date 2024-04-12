@@ -34,9 +34,17 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <!-- profile -->
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
+
+                        @hasrole('manager')
+                        <!-- akun -->
+                        <x-dropdown-link :href="route('akun.index')">
+                            {{ __('Akun') }}
+                        </x-dropdown-link>
+                        @endhasrole
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -83,6 +91,12 @@
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
+                <!-- akun -->
+                @hasrole('manager')
+                <x-responsive-nav-link :href="route('akun.index')">
+                    {{ __('Akun') }}
+                </x-responsive-nav-link>
+                @endhasrole
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
