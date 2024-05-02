@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('member', function (Blueprint $table) {
+        Schema::create('stok', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
-            $table->text('alamat');
-            $table->string('nohp');
-            $table->decimal('dp_limit');
-            $table->integer('rental_limit')->unsigned();
-            $table->integer('rental_total')->unsigned()->default("0");
+            $table->unsignedBigInteger('produk_id');
+            $table->integer('stok')->unsigned();
+            $table->integer('stok_tersedia')->unsigned();
+            $table->string('ukuran');
+            $table->decimal('harga', 10, 2);
             $table->boolean('hidden')->default(false);
-
             $table->timestamps();
+
+            $table->foreign('produk_id')->references('id')->on('produk');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('member');
+        Schema::dropIfExists('stok');
     }
 };

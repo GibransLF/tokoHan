@@ -3,6 +3,7 @@
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ManageProdukController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +36,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/member/edit/{id}', [MemberController::class, 'edit'])->name('member.edit');
     Route::patch('/member/update/{id}', [MemberController::class, 'update'])->name('member.update');
     Route::delete('/member/delete/{id}', [MemberController::class, 'destroy'])->name('member.destroy');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/manageProduk', [ManageProdukController::class, 'index'])->name('manageProduk.index');
+    Route::get('/manageProduk/create', [ManageProdukController::class, 'create'])->name('manageProduk.create');
+    Route::post('/manageProduk/store', [ManageProdukController::class, 'store'])->name('manageProduk.store');
+    Route::get('/manageProduk/edit/{id}', [ManageProdukController::class, 'edit'])->name('manageProduk.edit');
+    Route::patch('/manageProduk/update/{id}', [ManageProdukController::class, 'update'])->name('manageProduk.update');
+    Route::delete('/manageProduk/delete/{id}', [ManageProdukController::class, 'destroy'])->name('manageProduk.destroy');
 });
 
 require __DIR__.'/auth.php';

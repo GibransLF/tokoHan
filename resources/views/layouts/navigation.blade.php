@@ -43,13 +43,17 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-
+                        
                         @hasrole('manager')
                         <!-- akun -->
                         <x-dropdown-link :href="route('akun.index')">
                             {{ __('Akun') }}
                         </x-dropdown-link>
                         @endhasrole
+                        
+                        <x-dropdown-link :href="route('manageProduk.index')">
+                            {{ __('Manage Produk') }}
+                        </x-dropdown-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -100,12 +104,17 @@
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
+                
                 <!-- akun -->
                 @hasrole('manager')
                 <x-responsive-nav-link :href="route('akun.index')">
                     {{ __('Akun') }}
                 </x-responsive-nav-link>
                 @endhasrole
+
+                <x-responsive-nav-link :href="route('manageProduk.index')">
+                    {{ __('Manage Produk') }}
+                </x-responsive-nav-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">

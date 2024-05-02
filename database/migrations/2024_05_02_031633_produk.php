@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('member', function (Blueprint $table) {
+        Schema::create('produk', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
-            $table->text('alamat');
-            $table->string('nohp');
-            $table->decimal('dp_limit');
-            $table->integer('rental_limit')->unsigned();
-            $table->integer('rental_total')->unsigned()->default("0");
+            $table->string('kode')->unique();
+            $table->string('nama');
+            $table->string('gambar');
+            $table->text('deskripsi')->nullable();
             $table->boolean('hidden')->default(false);
-
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('member');
+        Schema::dropIfExists('produk');
     }
 };
