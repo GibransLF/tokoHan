@@ -57,10 +57,61 @@
                             </td>
                             <td class="px-6 py-4">
                                 @foreach( $produk->stoks as $stok )
-                                {{ $stok -> ukuran }} : {{ $stok -> stok }},<br>
+                                {{ $stok -> ukuran }} &nbsp; {{ $stok -> stok }} &nbsp;Rp. {{ number_format($stok -> harga, 2, ',', '.') }} <br>
                                 @endforeach
                             </td>
                             <td>
+                                
+                                <!-- Modal toggle -->
+                                <button data-modal-target="preview-modal{{ $produk -> id }}" data-modal-toggle="preview-modal{{ $produk -> id }}" type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Preview
+                                </button>
+
+                                <!-- Main modal -->
+                                <div id="preview-modal{{ $produk -> id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div class="relative p-4 w-full max-w-2xl max-h-full">
+                                        <!-- Modal content -->
+                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                            <!-- Modal header -->
+                                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                    Pre-View
+                                                </h3>
+                                                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="preview-modal{{ $produk -> id }}">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                            </div>
+                                            <!-- Modal body -->
+                                            <div class="flex justify-center my-5">
+                                                <x-card-produk>
+                                                    <x-slot:gambar>{{ $produk -> gambar }}</x-slot:gambar>
+                                                    <x-slot:kode>{{ $produk -> kode }}</x-slot:kode>
+                                                    <x-slot:nama>{{ $produk -> nama }}</x-slot:nama>
+                                                    <x-slot:deskripsi>{{ $produk -> deskripsi }}</x-slot:deskripsi>
+
+                                                @php
+                                                    $hargaArray = $produk->stoks->pluck('harga')->toArray();
+                                                    $hargaMin = number_format(min($hargaArray), 2, ',', '.');
+                                                @endphp
+                                                    <x-slot name="ukuran">
+                                                        @foreach($produk->stoks as $stok)
+                                                            {{ $stok -> ukuran }}, 
+                                                        @endforeach
+                                                    </x-slot>
+                                                    <x-slot:hargaMin> {{$hargaMin}} </x-slot:hargaMin>
+                                                    <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</a>
+                                                </x-card-produk>
+                                                </div>
+                                            <!-- Modal footer -->
+                                            <div class="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                                                <button data-modal-hide="preview-modal{{ $produk -> id }}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <a href="{{ route("manageProduk.edit", $produk->id) }}" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Ubah</a>
 
                                 <button data-modal-target="popup-modal{{$produk->id}}" data-modal-toggle="popup-modal{{$produk->id}}" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Hapus</button>
