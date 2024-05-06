@@ -18,7 +18,7 @@ class StokProdukSeeder extends Seeder
         DB::table('produk')->insert([
             'kode' => 'LF046EZ',
             'nama' => 'Tester',
-            'gambar' => 'logo.png',
+            'gambar' => 'img/produk/logo.png',
             'deskripsi' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
             'hidden' => false,
             'created_at' => now(),
@@ -29,7 +29,7 @@ class StokProdukSeeder extends Seeder
         DB::table('stok')->insert([
             'produk_id' => '1',
             'stok' => '64',
-            'stok_tersedia' => '64',
+            'stok_total' => '64',
             'ukuran' => 'L',
             'harga' => '50000',
             'hidden' => false,
@@ -39,7 +39,7 @@ class StokProdukSeeder extends Seeder
         DB::table('stok')->insert([
             'produk_id' => '1',
             'stok' => '64',
-            'stok_tersedia' => '64',
+            'stok_total' => '64',
             'ukuran' => 'XL',
             'harga' => '100000',
             'hidden' => false,

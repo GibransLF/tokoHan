@@ -18,8 +18,7 @@ class MemberSeeder extends Seeder
             'alamat' => 'Alamat Non Member',
             'nohp' => '000000000000',
             'dp_limit' => '0.15',
-            'rental_limit' => '10',
-            'hidden' => true,
+            'rental_limit' => '999',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

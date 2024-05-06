@@ -53,12 +53,13 @@
                                 {{ $produk -> nama }}
                             </td>
                             <td class="px-6 py-4">
-                            <img class="rounded-t-lg w-32 h-auto object-center" src="{{asset('img/'. $produk -> gambar)}}" alt="">
+                            <img class="rounded-lg w-32 h-auto object-center" src="{{asset('storage/'. $produk -> gambar)}}" alt="">
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 mb-2">
                                 @foreach( $produk->stoks as $stok )
                                 {{ $stok -> ukuran }} &nbsp; {{ $stok -> stok }} &nbsp;Rp. {{ number_format($stok -> harga, 2, ',', '.') }} <br>
                                 @endforeach
+                                <a href="{{ route("stok.show", $produk->nama) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Menu Stok...</a>
                             </td>
                             <td>
                                 
@@ -93,7 +94,12 @@
 
                                                 @php
                                                     $hargaArray = $produk->stoks->pluck('harga')->toArray();
-                                                    $hargaMin = number_format(min($hargaArray), 2, ',', '.');
+                                                    if(empty($hargaArray)){
+                                                        $hargaMin = number_format(0, 2, ',', '.');
+                                                    }
+                                                    else{
+                                                        $hargaMin = number_format(min($hargaArray), 2, ',', '.');
+                                                    }
                                                 @endphp
                                                     <x-slot name="ukuran">
                                                         @foreach($produk->stoks as $stok)

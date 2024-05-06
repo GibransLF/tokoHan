@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('produk_id');
             $table->integer('stok')->unsigned();
-            $table->integer('stok_tersedia')->unsigned();
+            $table->integer('stok_total')->unsigned();
             $table->string('ukuran');
             $table->decimal('harga', 10, 2);
             $table->boolean('hidden')->default(false);

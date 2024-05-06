@@ -1,6 +1,6 @@
 <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     <a href="#">
-        <img class="mx-auto rounded-t-lg h-32 w-auto object-center" src="{{ asset('img/' . $gambar) }}" alt="product image" />
+        <img class="mx-auto rounded-t-lg h-32 w-auto object-center" src="{{ asset('storage/' . $gambar) }}" alt="product image" />
     </a>
     <div class="p-5"> 
             <h3 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $nama . " - " . $kode }}</h3>
