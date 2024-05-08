@@ -19,9 +19,10 @@ class StokController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($namaProduk)
     {
-        //
+        $produk = Produk::where('nama', $namaProduk)->firstOrFail();
+        return view("stok.create", compact("produk"));
     }
 
     /**
@@ -29,7 +30,22 @@ class StokController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'ukuran' => 'required|string|max:50',
+            'stok' => 'required|integer|min:0',
+            'harga' => 'required|numeric|min:0',
+        ]);
+
+        $data["stok_total"] = $data["stok"];
+        $data["produk_id"] = $request->produk_id;
+
+        if(Stok::create($data)){
+
+            return redirect()->route('stok.show', $request->nama )->with('success', 'Data berhasil disimpan!');
+        }
+        else{
+            return redirect()->route('member.index', $request->nama)->with('errors', 'Data gagal disimpan!');
+        }
     }
 
     /**
@@ -37,7 +53,8 @@ class StokController extends Controller
      */
     public function show(string $namaProduk)
     {
-        $stoks = Stok::join('produk', 'stok.produk_id', '=', 'produk.id')
+        $stoks = Stok::select('stok.*', 'produk.nama')
+                ->join('produk', 'stok.produk_id', '=', 'produk.id')
                 ->where('produk.nama', $namaProduk)
                 ->get();
 
@@ -64,8 +81,13 @@ class StokController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $namaProduk,string $id)
     {
-        //
+        if(Stok::destroy($id)){
+            return redirect()->route('stok.show', $namaProduk)->with('success', 'Data stok berhasil dihapus!');
+        }
+        else{
+            return redirect()->route('stok.show', $namaProduk)->with('errors', 'Data stok gagal dihapus!');
+        }
     }
 }

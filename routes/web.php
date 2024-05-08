@@ -49,12 +49,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/stok/{namaProduk}', [StokController::class, 'show'])->name('stok.show');
-    Route::get('/stok/create', [StokController::class, 'create'])->name('stok.create');
+    Route::get('/{namaProduk}/stok', [StokController::class, 'show'])->name('stok.show');
+    Route::get('/{namaProduk}/stok/create', [StokController::class, 'create'])->name('stok.create');
     Route::post('/stok/store', [StokController::class, 'store'])->name('stok.store');
     Route::get('/stok/edit/{id}', [StokController::class, 'edit'])->name('stok.edit');
     Route::patch('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
-    Route::delete('/stok/delete/{id}', [StokController::class, 'destroy'])->name('stok.destroy');
+    Route::delete('/{namaProduk}/stok/delete/{id}', [StokController::class, 'destroy'])->name('stok.destroy');
 });
 
 require __DIR__.'/auth.php';

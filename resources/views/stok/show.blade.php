@@ -1,9 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            
-            <a href="{{ route("manageProduk.index") }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$namaProduk}}</a>&nbsp;->&nbsp;{{ __('stok') }}
+        <div class="flex justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <a href="{{ route("manageProduk.index") }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{$namaProduk}}</a>&nbsp;/&nbsp;{{ __('stok') }}
             </h2>
+        
+            <a href="{{route('manageProduk.index')}}" class="relative inline-flex items-center justify-center p-0.5  overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            Kembali
+            </span>
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -17,7 +24,7 @@
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                <a href="{{route('stok.create')}}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Tambah stok</a>
+                <a href="{{route('stok.create', $namaProduk)}}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Tambah Stok</a>
                     <x-table>
                         <x-slot name='header'>
                             <tr>
@@ -72,7 +79,7 @@
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                                 </svg>
                                                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah anda yakin ingin menghapus Akun ini?</h3>
-                                                <form method="post" action="{{ route("stok.destroy", $stok->id ) }}">
+                                                <form method="post" action="{{ route("stok.destroy", ["namaProduk" => $namaProduk, "id" => $stok->id] ) }}">
                                                 @csrf
                                                 @method("DELETE")
                                                     <button data-modal-hide="popup-modal{{$stok->id}}" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
