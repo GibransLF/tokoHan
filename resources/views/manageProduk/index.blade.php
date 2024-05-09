@@ -59,7 +59,7 @@
                                 @foreach( $produk->stoks as $stok )
                                 {{ $stok -> ukuran }} &nbsp; {{ $stok -> stok }} &nbsp;Rp. {{ number_format($stok -> harga, 2, ',', '.') }} <br>
                                 @endforeach
-                                <a href="{{ route("stok.show", $produk->nama) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Menu Stok...</a>
+                                <a href="{{ route("stok.show", $produk->nama) }}" class="font-medium text-blue-600 underline dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700 hover:no-underline">Menu Stok...</a>
                             </td>
                             <td>
                                 

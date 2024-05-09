@@ -40,7 +40,6 @@ class StokController extends Controller
         $data["produk_id"] = $request->produk_id;
 
         if(Stok::create($data)){
-
             return redirect()->route('stok.show', $request->nama )->with('success', 'Data berhasil disimpan!');
         }
         else{
@@ -65,9 +64,12 @@ class StokController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $namaProduk,string $id)
     {
-        //
+        $stok = Stok::findOrFail($id);
+        $produk = Produk::where('nama', $namaProduk)->firstOrFail();
+
+        return view("stok.edit", compact("stok", "produk"));
     }
 
     /**
@@ -75,8 +77,21 @@ class StokController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $stok = Stok::findOrFail($id);
+
+        $data = $request->validate([
+            'ukuran' => 'required|string|max:50',
+            'stok' => 'required|integer|min:0',
+            'harga' => 'required|numeric|min:0',
+        ]);
+        if($stok->update($data)){
+            return redirect()->route('stok.show', $request["nama"])->with('success', 'Data berhasil diubah.');
+        }
+        else{
+            return redirect()->route('stok.show', $request["nama"])->with('errors', 'Data gagal diubah.');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
