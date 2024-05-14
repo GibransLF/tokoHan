@@ -19,9 +19,24 @@
             <!-- Dropdown menu -->
             <div id="dropdownCart" class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"  aria-labelledby="dropdownCartButton">
                 <div class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
-            Notifications
+                    Cart
                 </div>
-                <div class="divide-y divide-gray-100 dark:divide-gray-700" style="max-height: 65vh; overflow-y: auto; z-index: 1;">
+                <div class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
+                <form class="max-w-sm mx-auto">
+                    <select id="member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option selected hidden>Pilih Member Dahulu</option>
+                        @foreach ($members as $member)
+                        <option value="{{ $member->id }}">{{$member->nama}}</option>
+                        @endforeach
+                    </select>
+                    </form>
+                    <div class="flex justify-between m-2">
+                        <span id="dp_limit">DP limit: -</span>
+                        <span id="rental_total">Rental mula: -</span>
+                        <span id="rental_limit">Rental max: -</span>
+                    </div>
+                </div>
+                <div class="divide-y divide-gray-100 dark:divide-gray-700" style="max-height: 45vh; overflow-y: auto; z-index: 1;">
                     <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <div class="flex-shrink-0">
                             <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
@@ -29,60 +44,6 @@
                         <div class="w-full ps-3">
                             <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
                             <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
-                        </div>
-                        <div class="w-full ps-3">
-                            <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
-                            <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
-                        </div>
-                        <div class="w-full ps-3">
-                            <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div>
-                            <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-2.jpg" alt="Joseph image">
-                        </div>
-                        <div class="w-full ps-3">
-                            <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400"><span class="font-semibold text-gray-900 dark:text-white">Joseph Mcfall</span> and <span class="font-medium text-gray-900 dark:text-white">5 others</span> started following you.</div>
-                            <div class="text-xs text-blue-600 dark:text-blue-500">10 minutes ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image">
-                        </div>
-                        <div class="w-full ps-3">
-                            <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400"><span class="font-semibold text-gray-900 dark:text-white">Bonnie Green</span> and <span class="font-medium text-gray-900 dark:text-white">141 others</span> love your story. See it and view more stories.</div>
-                            <div class="text-xs text-blue-600 dark:text-blue-500">44 minutes ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-4.jpg" alt="Leslie image">
-                        </div>
-                        <div class="w-full ps-3">
-                            <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400"><span class="font-semibold text-gray-900 dark:text-white">Leslie Livingston</span> mentioned you in a comment: <span class="font-medium text-blue-500" href="#">@bonnie.green</span> what do you say?</div>
-                            <div class="text-xs text-blue-600 dark:text-blue-500">1 hour ago</div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11" src="/docs/images/people/profile-picture-5.jpg" alt="Robert image">
-                        </div>
-                        <div class="w-full ps-3">
-                            <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400"><span class="font-semibold text-gray-900 dark:text-white">Robert Brown</span> posted a new video: Glassmorphism - learn how to implement the new design trend.</div>
-                            <div class="text-xs text-blue-600 dark:text-blue-500">3 hours ago</div>
                         </div>
                     </a>
                 </div>
@@ -108,3 +69,27 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var member = document.getElementById("member");
+        member.addEventListener('change', function(){
+            var memberId = this.value;
+            if(memberId){
+                fetch(`/orderProduk/${memberId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("dp_limit").textContent = 'DP Limit: ' + data.dp_limit*100 + '%';
+                    document.getElementById("rental_total").textContent = 'Rental Total: ' + data.rental_total;
+                    document.getElementById("rental_limit").textContent = 'Rental Limit: ' + data.rental_limit;
+                })
+                .catch(error => console.error('Error:', error));
+                } 
+                else {
+                    document.getElementById("dp_limit").textContent = 'DP Limit: -';
+                    document.getElementById("rental_total").textContent = 'Rental Total: -';
+                    document.getElementById("rental_limit").textContent = 'Rental Limit: -';
+                }
+        })
+    })
+</script>

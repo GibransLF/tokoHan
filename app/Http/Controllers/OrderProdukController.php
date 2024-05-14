@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class OrderProdukController extends Controller
@@ -11,7 +12,8 @@ class OrderProdukController extends Controller
      */
     public function index()
     {
-        return view("orderProduk.index");
+        $members = Member::all();
+        return view("orderProduk.index", compact("members"));
     }
 
     /**
@@ -33,9 +35,10 @@ class OrderProdukController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $memberId)
     {
-        //
+        $member = Member::findOrFail($memberId);
+        return response()->json($member);
     }
 
     /**

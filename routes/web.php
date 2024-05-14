@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/orderProduk', [OrderProdukController::class, 'index'])->name('orderProduk.index');
+    Route::get('/orderProduk/{memberId}', [OrderProdukController::class, 'show'])->name('orderProduk.show');
     Route::get('/orderProduk/create', [OrderProdukController::class, 'create'])->name('orderProduk.create');
     Route::post('/orderProduk/store', [OrderProdukController::class, 'store'])->name('orderProduk.store');
     Route::get('/orderProduk/edit/{id}', [OrderProdukController::class, 'edit'])->name('orderProduk.edit');
