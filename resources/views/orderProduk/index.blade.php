@@ -32,8 +32,8 @@
                     </form>
                     <div class="flex justify-between m-2">
                         <span id="dp_limit">DP limit: -</span>
-                        <span id="rental_total">Rental mula: -</span>
-                        <span id="rental_limit">Rental max: -</span>
+                        <span id="rental_total">Rental Total: -</span>
+                        <span id="rental_limit">Max: -</span>
                     </div>
                 </div>
                 <div class="divide-y divide-gray-100 dark:divide-gray-700" style="max-height: 45vh; overflow-y: auto; z-index: 1;">
@@ -47,14 +47,28 @@
                         </div>
                     </a>
                 </div>
-                <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
-                    <div class="inline-flex items-center ">
-                        <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-                            <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
-                        </svg>
-                        View all
-                    </div>
-                </a>
+                <div class="flex">
+                    <!-- Tombol kiri -->
+                    <a href="#" class="w-1/3 block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-red-300 hover:bg-red-400 dark:bg-red-800 dark:hover:bg-red-700 dark:text-white">
+                        <div class="inline-flex items-center justify-center w-full h-full">
+                            <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                            </svg>
+                            Hapus Semua
+                        </div>
+                    </a>
+
+                    <!-- Tombol kanan -->
+                    <a href="#" class="w-2/3 block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-green-300 hover:bg-green-400 dark:bg-green-800 dark:hover:bg-green-700 dark:text-white">
+                        <div class="inline-flex items-center justify-center w-full h-full">
+                            <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                            </svg>
+                            Transaksi
+                        </div>
+                    </a>
+                </div>
+
             </div>
         </div>
     </x-slot>
@@ -62,8 +76,35 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" x-data="dataProduks">
+                
+                    @foreach ($produks as $produk)
+                    
+                    <x-card-produk>
+                        <x-slot:gambar>{{ $produk -> gambar }}</x-slot:gambar>
+                        <x-slot:kode>{{ $produk -> kode }}</x-slot:kode>
+                        <x-slot:nama>{{ $produk -> nama }}</x-slot:nama>
+                        <x-slot:deskripsi>{{ $produk -> deskripsi }}</x-slot:deskripsi>
+
+                    @php
+                        $harga = $hargaView->values()->get($produk->id)['hargaMin'] ?? null;
+                        if(empty($harga)){
+                            $hargaMin = number_format(0, 2, ',', '.');
+                        }
+                        else{
+                            $hargaMin = number_format($harga, 2, ',', '.');
+                        }
+                    @endphp
+                        <x-slot name="ukuran">
+                            @foreach($produk->stoks as $stok)
+                                {{ $stok -> ukuran }}, 
+                            @endforeach
+                        </x-slot>
+                        <x-slot:hargaMin> {{$hargaMin}} </x-slot:hargaMin>
+                        <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</a>
+                    </x-card-produk>
+                    @endforeach
+
                 </div>
             </div>
         </div>
@@ -79,17 +120,28 @@
                 fetch(`/orderProduk/${memberId}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     document.getElementById("dp_limit").textContent = 'DP Limit: ' + data.dp_limit*100 + '%';
                     document.getElementById("rental_total").textContent = 'Rental Total: ' + data.rental_total;
-                    document.getElementById("rental_limit").textContent = 'Rental Limit: ' + data.rental_limit;
+                    document.getElementById("rental_limit").textContent = 'Max: ' + data.rental_limit;
                 })
                 .catch(error => console.error('Error:', error));
-                } 
-                else {
-                    document.getElementById("dp_limit").textContent = 'DP Limit: -';
-                    document.getElementById("rental_total").textContent = 'Rental Total: -';
-                    document.getElementById("rental_limit").textContent = 'Rental Limit: -';
-                }
+            } 
+            else {
+                document.getElementById("dp_limit").textContent = 'DP Limit: -';
+                document.getElementById("rental_total").textContent = 'Rental Total: -';
+                document.getElementById("rental_limit").textContent = 'Max: -';
+            }
         })
-    })
+    });
+</script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('dataProduks', () => ({
+
+            }));
+        });
+</script>
+<script>
+        console.log("Data dari controller:", data);
 </script>

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\Produk;
+use App\Models\Stok;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class OrderProdukController extends Controller
@@ -13,7 +16,17 @@ class OrderProdukController extends Controller
     public function index()
     {
         $members = Member::all();
-        return view("orderProduk.index", compact("members"));
+
+        $produks = Produk:: select("produk.id AS id_produk", "kode", "nama", "gambar", "deskripsi")
+                            ->where("hidden", false)->with(('stoks'))
+                            ->get();
+
+        $hargaView = Stok::select('produk_id', DB::raw('MIN(harga) as hargaMin'))
+                    ->groupBy('produk_id')
+                    ->get()
+                    ->keyBy("produk_id");
+
+        return view("orderProduk.index", compact("members", "produks", "hargaView"));
     }
 
     /**
