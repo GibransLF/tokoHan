@@ -17,9 +17,8 @@ class OrderProdukController extends Controller
     {
         $members = Member::all();
 
-        $produks = Produk:: select("produk.id AS id_produk", "kode", "nama", "gambar", "deskripsi")
-                            ->where("hidden", false)->with(('stoks'))
-                            ->get();
+        $produks = Produk::where("hidden", false)->get();
+        $produks->load('stoks');
 
         $hargaView = Stok::select('produk_id', DB::raw('MIN(harga) as hargaMin'))
                     ->groupBy('produk_id')
