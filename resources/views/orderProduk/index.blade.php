@@ -63,8 +63,13 @@
                     </div>
                 </div>
                 <div class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
-                    <div class="inline-flex items-center ">
-                        View all
+                    <div class="flex justify-between m-2">
+                        <div class="flex items-center">
+                            <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300">DP: </label>
+                            <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-400 border-gray-500 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 mx-1">
+                            <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300">Rp 25.000.000,00</label>
+                        </div>
+                        <span id="r" class="text-green-600">Total: Rp 50.000.000,00</span>
                     </div>
                 </div>
                 <div class="flex">
