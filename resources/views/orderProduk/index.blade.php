@@ -20,7 +20,7 @@
             
         </div>
     </x-slot>
-
+    <div x-data="$store.cart">
     <!-- Dropdown menu -->
     <div id="dropdownCart" class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"  aria-labelledby="dropdownCartButton">
         <div class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
@@ -28,38 +28,60 @@
         </div>
         <div class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
         <form class="max-w-sm mx-auto">
-            <select id="member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select id="member" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change="updateUiData($event.target.value)">
                 <option selected hidden>Pilih Member Dahulu</option>
                 @foreach ($members as $member)
-                <option value="{{ $member->id }}">{{$member->nama}}</option>
+                <option value="{{ $member->id }}" >{{$member->nama}}</option>
                 @endforeach
             </select>
             </form>
             <div class="flex justify-between m-2">
-                <span id="dp_limit">DP limit: -</span>
-                <span id="rental_total">Rental Total: -</span>
-                <span id="rental_limit">Max: -</span>
+                <span x-text="'dp_limit: ' + dp">DP limit: -</span>
+                <span x-text="'rental_total: ' + rental_total">Rental Total: -</span>
+                <span x-text="'rental_limit: ' + rental_limit">Max: -</span>
             </div>
         </div>
         <div class="divide-y divide-gray-100 dark:divide-gray-700" style="max-height: 45vh; overflow-y: auto; z-index: 1;" >
             <!-- dropdownContent -->
-            <div id="itemCart" x-data="$store.cart">
-                
-            </div>
+            <template x-for="(item, index) in items" :key="index">
+                <div class="flex items-center p-4 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <div class="flex-shrink-0">
+                        <img class="rounded-lg w-11 h-11" :src="'{{ asset('storage/')}}/' + item.gambarProduk" alt="Item image">
+                    </div>
+                    <div class="w-full ps-3">
+                        <span class="text-sm text-gray-900 dark:text-gray-800 mx-1 mb-1" x-text="item.kodeProduk +' - '+ item.namaProduk +' - '+ item.ukuran"></span>
+                        <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400 mx-1 flex items-center space-x-2">
+                            <span class="text-gray-800 flex-grow-[2]" x-text="parseFloat(item.harga*item.qty).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                            <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow" @click="cek()">
+                                <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
+                                </svg>
+                            </button>
+                            <span class="text-gray-800" x-text="item.qty"></span>
+                            <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow" @click="addToCart(item)">
+                                <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-600 dark:text-gray-500 mx-1" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></div>
+                    </div>
+                </div>
+            </template>
         </div>
         <div class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
             <div class="flex justify-between m-2">
                 <div class="flex items-center">
                     <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300">DP: </label>
                     <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-400 border-gray-500 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 mx-1">
-                    <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300">Rp 25.000.000,00</label>
+                    <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300" x-text="parseFloat(hargaTotal*dp).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })">Rp 25.000.000,00</label>
                 </div>
-                <span id="r" class="text-green-600">Total: Rp 50.000.000,00</span>
+                <span class="text-green-600" x-text="'Total: ' + parseFloat(hargaTotal).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
             </div>
         </div>
         <div class="flex">
             <!-- Tombol kiri -->
-            <button class="w-1/3 block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-red-300 hover:bg-red-400 dark:bg-red-800 dark:hover:bg-red-700 dark:text-white">
+            <button class="w-1/3 block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-red-300 hover:bg-red-400 dark:bg-red-800 dark:hover:bg-red-700 dark:text-white" @click="cek">
                 <div class="inline-flex items-center justify-center w-full h-full">
                     <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
@@ -67,7 +89,7 @@
                     Hapus Semua
                 </div>
             </button>
-
+    
             <!-- Tombol kanan -->
             <button class="w-2/3 block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-green-300 hover:bg-green-400 dark:bg-green-800 dark:hover:bg-green-700 dark:text-white">
                 <div class="inline-flex items-center justify-center w-full h-full">
@@ -84,7 +106,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" x-data="$store.cart">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 
                     @foreach ($produks as $produk)
                     
@@ -160,12 +182,16 @@
                                                             <td class="px-6 py-4">
                                                                 {{$stok->harga}}
                                                         </td>
-                                                        <?php 
-                                                            $stok["namaProduk"] = $produk->nama; 
-                                                            $stok["gambarProduk"]  = $produk->gambar;
-                                                        ?>
                                                         <td class="px-6 py-4 text-right">
-                                                            <a href="#" @click="addToCart({{$stok}})" data-modal-hide="authentication-modal{{$produk->id}}">
+                                                            <a href="#" @click="addToCart({
+                                                                id: '{{$stok->id}}',
+                                                                produk_id: '{{$stok->produk_id}}',
+                                                                kodeProduk: '{{$produk->kode}}',
+                                                                namaProduk: '{{$produk->nama}}',
+                                                                gambarProduk: '{{$produk->gambar}}',
+                                                                ukuran: '{{$stok->ukuran}}',
+                                                                harga: '{{$stok->harga}}',
+                                                            })" data-modal-hide="authentication-modal{{$produk->id}}">
                                                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"/>
                                                                 </svg>
@@ -188,57 +214,65 @@
             </div>
         </div>
     </div>
+    </div>
 </x-app-layout>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var member = document.getElementById("member");
-        member.addEventListener('change', function(){
-            var memberId = this.value;
-            if(memberId){
-                fetch(`/orderProduk/${memberId}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("dp_limit").textContent = 'DP Limit: ' + data.dp_limit*100 + '%';
-                    document.getElementById("rental_total").textContent = 'Rental Total: ' + data.rental_total;
-                    document.getElementById("rental_limit").textContent = 'Max: ' + data.rental_limit;
-                })
-                .catch(error => console.error('Error:', error));
-            } 
-            else {
-                document.getElementById("dp_limit").textContent = 'DP Limit: -';
-                document.getElementById("rental_total").textContent = 'Rental Total: -';
-                document.getElementById("rental_limit").textContent = 'Max: -';
-            }
-        })
-    });
-</script>
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.store('cart', () => ({
             items: [],
-            qty : 0,
+            totalQty : 0,
             hargaTotal : 0,
-            addToCart(newItem){
-                this.items.push(newItem);
-                this.qty++;
-                this.hargaTotal += parseFloat(newItem.harga);
+            dp : 0,
+            rental_total : 0,
+            rental_limit : 0,
 
-                if(this.qty == 0){
+            updateUiData(memberId){
+                if(memberId){
+                    fetch(`/orderProduk/${memberId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.dp = data.dp_limit;
+                        this.rental_total = data.rental_total;
+                        this.rental_limit = data.rental_limit;
+                        console.log(this.dp, this.rental_total, this.rental_limit);
+                    })
+                }
+                else{
+                    this.dp = 0;
+                    this.remtal_total = 0;
+                    this.rental_limit = 0;
+                }
+            },
+
+            addToCart(newItem){
+                const findItem = this.items.find((item) => item.id == newItem.id)
+
+                if(!findItem){
+                    this.items.push({...newItem, qty: 1});
+                    this.totalQty++;
+                    this.hargaTotal += parseFloat(newItem.harga);
+                    this.dpCount = this.hargaTotal;
+                }
+                else{
+                    findItem.qty += 1;
+                    this.totalQty++;
+                    this.hargaTotal += parseFloat(newItem.harga);
+                }
+
+                if(this.totalQty == 0){
 
                     document.getElementById("notifyItemCart").style.opacity = "0";
                     document.getElementById("countItemCart").textContent = "";
                 }
                 else{
                     document.getElementById("notifyItemCart").style.opacity = "1";
-                    document.getElementById("countItemCart").textContent = this.qty;
-
+                    document.getElementById("countItemCart").textContent = this.totalQty;
                 }
-                console.log(this.items, this.qty);
-                displayItems(this.items);   
+                console.log(this.items, this.totalQty);
             },
             cek(){
-                console.log("hehe");
+                console.log(this.items);
             },
         }));
     });
@@ -254,27 +288,7 @@
             itemElement.classList.add('flex', 'px-4', 'py-3', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
 
             itemElement.innerHTML = `
-                <div class="flex-shrink-0">
-                    <img class="rounded-lg w-11 h-11" src="<?= asset('storage/') ?>/${item.gambarProduk}" alt="Item image">
-                    <span>${item.id}</span>
-                </div>
-                <div class="w-full ps-3">
-                    <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400 mx-1 flex items-center space-x-2">
-                        <span class="text-gray-800 flex-grow-[2]">Rp ${item.harga.toLocaleString('id-ID')}</span>
-                        <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow @clik="cek()">
-                            <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" @click="cek()">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
-                            </svg>
-                        </button>
-                        <span class="text-gray-800">${item.stok}</span>
-                        <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow">
-                            <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="text-xs text-gray-600 dark:text-gray-500 mx-1">Ukuran: ${item.ukuran}</div>
-                </div>
+                
             `;
 
             container.appendChild(itemElement);
