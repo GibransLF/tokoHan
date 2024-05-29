@@ -36,9 +36,9 @@
             </select>
             </form>
             <div class="flex justify-between m-2">
-                <span x-text="'dp_limit: ' + dp">DP limit: -</span>
-                <span x-text="'rental_total: ' + rental_total">Rental Total: -</span>
-                <span x-text="'rental_limit: ' + rental_limit">Max: -</span>
+                <span x-text="'DP: ' + dp * 100 + '%'">DP limit: -</span>
+                <span :class="{'text-red-500': (rental_total + totalQty) >= rental_limit}" x-text="'Rental Total: ' + (rental_total + totalQty) + '/' + rental_limit">Rental Total: -</span>
+                <span x-text="'Qty Cart: ' + totalQty">Rental Total: -</span>
             </div>
         </div>
         <div class="divide-y divide-gray-100 dark:divide-gray-700" style="max-height: 45vh; overflow-y: auto; z-index: 1;" >
@@ -247,7 +247,13 @@
             },
 
             addToCart(newItem){
-                if(this,member === 0){
+                if(this.member === 0){
+                    alert("Pilih Member Dahulu di Tombol Cart");
+                }
+                else if(this.rental_total + this.totalQty == this.rental_limit){
+                    return;
+                }
+                else{
                     const findItem = this.items.find((item) => item.id == newItem.id)
     
                     if(!findItem){
@@ -270,9 +276,6 @@
                         document.getElementById("notifyItemCart").style.opacity = "1";
                         document.getElementById("countItemCart").textContent = this.totalQty;
                     }
-                }
-                else{
-                    alert("else");
                 }
             },
             remove(itemRemove){
