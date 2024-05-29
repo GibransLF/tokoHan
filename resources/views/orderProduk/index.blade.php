@@ -52,7 +52,7 @@
                         <span class="text-sm text-gray-900 dark:text-gray-800 mx-1 mb-1" x-text="item.kodeProduk +' - '+ item.namaProduk +' - '+ item.ukuran"></span>
                         <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400 mx-1 flex items-center space-x-2">
                             <span class="text-gray-800 flex-grow-[2]" x-text="parseFloat(item.harga*item.qty).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
-                            <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow" @click="cek()">
+                            <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow" @click="remove(item)">
                                 <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
                                 </svg>
@@ -74,14 +74,14 @@
                 <div class="flex items-center">
                     <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300">DP: </label>
                     <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-400 border-gray-500 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 mx-1">
-                    <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300" x-text="parseFloat(hargaTotal*dp).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })">Rp 25.000.000,00</label>
+                    <label for="default-checkbox" class="text-sm font-medium text-gray-900 dark:text-gray-300" x-text="parseFloat(hargaTotal*dp).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></label>
                 </div>
                 <span class="text-green-600" x-text="'Total: ' + parseFloat(hargaTotal).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
             </div>
         </div>
         <div class="flex">
             <!-- Tombol kiri -->
-            <button class="w-1/3 block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-red-300 hover:bg-red-400 dark:bg-red-800 dark:hover:bg-red-700 dark:text-white" @click="cek">
+            <button class="w-1/3 block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-red-300 hover:bg-red-400 dark:bg-red-800 dark:hover:bg-red-700 dark:text-white" @click="clearCart">
                 <div class="inline-flex items-center justify-center w-full h-full">
                     <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
@@ -226,6 +226,7 @@
             dp : 0,
             rental_total : 0,
             rental_limit : 0,
+            member : 0,
 
             updateUiData(memberId){
                 if(memberId){
@@ -235,7 +236,7 @@
                         this.dp = data.dp_limit;
                         this.rental_total = data.rental_total;
                         this.rental_limit = data.rental_limit;
-                        console.log(this.dp, this.rental_total, this.rental_limit);
+                        this.member = memberId;
                     })
                 }
                 else{
@@ -246,52 +247,62 @@
             },
 
             addToCart(newItem){
-                const findItem = this.items.find((item) => item.id == newItem.id)
-
-                if(!findItem){
-                    this.items.push({...newItem, qty: 1});
-                    this.totalQty++;
-                    this.hargaTotal += parseFloat(newItem.harga);
-                    this.dpCount = this.hargaTotal;
+                if(this,member === 0){
+                    const findItem = this.items.find((item) => item.id == newItem.id)
+    
+                    if(!findItem){
+                        this.items.push({...newItem, qty: 1});
+                        this.totalQty++;
+                        this.hargaTotal += parseFloat(newItem.harga);
+                    }
+                    else{
+                        findItem.qty += 1;
+                        this.totalQty++;
+                        this.hargaTotal += parseFloat(newItem.harga);
+                    }
+    
+                    if(this.totalQty == 0){
+    
+                        document.getElementById("notifyItemCart").style.opacity = "0";
+                        document.getElementById("countItemCart").textContent = "";
+                    }
+                    else{
+                        document.getElementById("notifyItemCart").style.opacity = "1";
+                        document.getElementById("countItemCart").textContent = this.totalQty;
+                    }
                 }
                 else{
-                    findItem.qty += 1;
-                    this.totalQty++;
-                    this.hargaTotal += parseFloat(newItem.harga);
+                    alert("else");
                 }
-
+            },
+            remove(itemRemove){
+                const findItem = this.items.find((item) => item.id == itemRemove.id)
+                if(findItem.qty <= 1 ){
+                    this.totalQty--;
+                    this.hargaTotal -= parseFloat(itemRemove.harga);
+                    this.items = this.items.filter((item) => item.id != itemRemove.id);
+                }
+                else{
+                    itemRemove.qty --;
+                    this.hargaTotal -= parseFloat(itemRemove.harga);
+                    this.totalQty--;
+                }
+                
                 if(this.totalQty == 0){
 
                     document.getElementById("notifyItemCart").style.opacity = "0";
-                    document.getElementById("countItemCart").textContent = "";
-                }
-                else{
-                    document.getElementById("notifyItemCart").style.opacity = "1";
-                    document.getElementById("countItemCart").textContent = this.totalQty;
-                }
-                console.log(this.items, this.totalQty);
-            },
-            cek(){
-                console.log(this.items);
+                document.getElementById("countItemCart").textContent = "";
+            }
+            else{
+                document.getElementById("notifyItemCart").style.opacity = "1";
+                document.getElementById("countItemCart").textContent = this.totalQty;
+            }
+        },
+            clearCart(){
+                this.items = [];
+                this.totalQty = 0;
+                this.hargaTotal = 0;
             },
         }));
     });
-</script>
-
-<script>
-    function displayItems(items) {
-        const container = document.getElementById('itemCart');
-        container.innerHTML = ''; // Clear previous content if any
-
-        items.forEach(item => {
-            const itemElement = document.createElement('div');
-            itemElement.classList.add('flex', 'px-4', 'py-3', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
-
-            itemElement.innerHTML = `
-                
-            `;
-
-            container.appendChild(itemElement);
-        });
-    }
 </script>
