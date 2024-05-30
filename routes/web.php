@@ -51,22 +51,18 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/{namaProduk}/stok', [StokController::class, 'show'])->name('stok.show');
-    Route::get('/{namaProduk}/stok/create', [StokController::class, 'create'])->name('stok.create');
+    Route::get('/{kodeProduk}/stok', [StokController::class, 'show'])->name('stok.show');
+    Route::get('/{kodeProduk}/stok/create', [StokController::class, 'create'])->name('stok.create');
     Route::post('/stok/store', [StokController::class, 'store'])->name('stok.store');
-    Route::get('/{namaProduk}/stok/edit/{id}', [StokController::class, 'edit'])->name('stok.edit');
+    Route::get('/{kodeProduk}/stok/edit/{id}', [StokController::class, 'edit'])->name('stok.edit');
     Route::patch('/stok/update/{id}', [StokController::class, 'update'])->name('stok.update');
-    Route::delete('/{namaProduk}/stok/delete/{id}', [StokController::class, 'destroy'])->name('stok.destroy');
+    Route::delete('/{kodeProduk}/stok/delete/{id}', [StokController::class, 'destroy'])->name('stok.destroy');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/orderProduk', [OrderProdukController::class, 'index'])->name('orderProduk.index');
     Route::get('/orderProduk/{memberId}', [OrderProdukController::class, 'show'])->name('orderProduk.show');
-    Route::get('/orderProduk/create', [OrderProdukController::class, 'create'])->name('orderProduk.create');
     Route::post('/orderProduk/store', [OrderProdukController::class, 'store'])->name('orderProduk.store');
-    Route::get('/orderProduk/edit/{id}', [OrderProdukController::class, 'edit'])->name('orderProduk.edit');
-    Route::patch('/orderProduk/update/{id}', [OrderProdukController::class, 'update'])->name('orderProduk.update');
-    Route::delete('/orderProduk/delete/{id}', [OrderProdukController::class, 'destroy'])->name('orderProduk.destroy');
 });
 
 require __DIR__.'/auth.php';

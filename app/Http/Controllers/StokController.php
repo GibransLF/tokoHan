@@ -19,9 +19,9 @@ class StokController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($namaProduk)
+    public function create($kodeProduk)
     {
-        $produk = Produk::where('nama', $namaProduk)->firstOrFail();
+        $produk = Produk::where('kode', $kodeProduk)->firstOrFail();
         return view("stok.create", compact("produk"));
     }
 
@@ -40,34 +40,35 @@ class StokController extends Controller
         $data["produk_id"] = $request->produk_id;
 
         if(Stok::create($data)){
-            return redirect()->route('stok.show', $request->nama )->with('success', 'Data berhasil disimpan!');
+            return redirect()->route('stok.show', $request->kode )->with('success', 'Data berhasil disimpan!');
         }
         else{
-            return redirect()->route('member.index', $request->nama)->with('errors', 'Data gagal disimpan!');
+            return redirect()->route('stok.index', $request->kode)->with('errors', 'Data gagal disimpan!');
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $namaProduk)
+    public function show(string $kodeProduk)
     {
-        $stoks = Stok::select('stok.*', 'produk.nama')
+        $stoks = Stok::select('stok.*', 'produk.kode', 'produk.nama')
                 ->join('produk', 'stok.produk_id', '=', 'produk.id')
-                ->where('produk.nama', $namaProduk)
+                ->where('produk.kode', $kodeProduk)
+                ->where('stok.hidden', false)
                 ->get();
 
 
-        return view("stok.show", compact("stoks", "namaProduk"));
+        return view("stok.show", compact("stoks", "kodeProduk"));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $namaProduk,string $id)
+    public function edit(string $kodeProduk,string $id)
     {
         $stok = Stok::findOrFail($id);
-        $produk = Produk::where('nama', $namaProduk)->firstOrFail();
+        $produk = Produk::where('kode', $kodeProduk)->firstOrFail();
 
         return view("stok.edit", compact("stok", "produk"));
     }
@@ -85,7 +86,7 @@ class StokController extends Controller
             'harga' => 'required|numeric|min:0',
         ]);
         if($stok->update($data)){
-            return redirect()->route('stok.show', $request["nama"])->with('success', 'Data berhasil diubah.');
+            return redirect()->route('stok.show', $request["kode"])->with('success', 'Data berhasil diubah.');
         }
         else{
             return redirect()->route('stok.show', $request["nama"])->with('errors', 'Data gagal diubah.');
@@ -96,13 +97,15 @@ class StokController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $namaProduk,string $id)
+    public function destroy(string $kodeProduk,string $id)
     {
-        if(Stok::destroy($id)){
-            return redirect()->route('stok.show', $namaProduk)->with('success', 'Data stok berhasil dihapus!');
+        $data = Stok::find($id);
+        $data->hidden = true;
+        if($data->save()){
+            return redirect()->route('stok.show', $kodeProduk)->with('success', 'Data stok berhasil dihapus!');
         }
         else{
-            return redirect()->route('stok.show', $namaProduk)->with('errors', 'Data stok gagal dihapus!');
+            return redirect()->route('stok.show', $kodeProduk)->with('errors', 'Data stok gagal dihapus!');
         }
     }
 }

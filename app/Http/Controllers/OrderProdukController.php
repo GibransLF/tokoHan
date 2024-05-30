@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use App\Models\Produk;
 use App\Models\Stok;
+use App\Models\Transaksi;
+use App\Models\DetailTansaksi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderProdukController extends Controller
 {
@@ -41,7 +44,20 @@ class OrderProdukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $nama = $user->nama; 
+
+        $data = $request->validate([
+            'items' => 'required|array',
+            'dp' => 'required|numeric',
+            'rental_total' => 'required|integer',
+            'rental_limit' => 'required|integer',
+            'dpCheck' => 'required|boolean',
+            'tgl_sewa' => 'required|date',
+            'tgl_pengembalian' => 'required|date|after_or_equal:tgl_sewa',
+        ]);
+
+        return $request->all();
     }
 
     /**

@@ -3,6 +3,9 @@ import "./bootstrap";
 import Alpine from "alpinejs";
 
 import "flowbite";
+
+import datePicker from "flowbite/dist/datepicker.js";
+
 window.Alpine = Alpine;
 
 Alpine.start();
