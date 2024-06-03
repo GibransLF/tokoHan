@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\MemberSeeder;
 use Database\Seeders\StokProdukSeeder;
+use App\Models\Promosi;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             MemberSeeder::class,
             StokProdukSeeder::class,
+            PromosiSeeder::class,
         ]);
     }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ManageProdukController;
+use App\Http\Controllers\ManagePromosiController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\OrderProdukController;
 
@@ -48,6 +49,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/manageProduk/edit/{id}', [ManageProdukController::class, 'edit'])->name('manageProduk.edit');
     Route::patch('/manageProduk/update/{id}', [ManageProdukController::class, 'update'])->name('manageProduk.update');
     Route::delete('/manageProduk/delete/{id}', [ManageProdukController::class, 'destroy'])->name('manageProduk.destroy');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/managePromosi', [ManagePromosiController::class, 'index'])->name('managePromosi.index');
+    Route::get('/managePromosi/create', [ManagePromosiController::class, 'create'])->name('managePromosi.create');
+    Route::get('/managePromosi/getStok/{id}', [ManagePromosiController::class, 'show'])->name('managePromosi.show');
+    Route::post('/managePromosi/store', [ManagePromosiController::class, 'store'])->name('managePromosi.store');
+    Route::get('/managePromosi/edit/{id}', [ManagePromosiController::class, 'edit'])->name('managePromosi.edit');
+    Route::patch('/managePromosi/update/{id}', [ManagePromosiController::class, 'update'])->name('managePromosi.update');
+    Route::delete('/managePromosi/delete/{id}', [ManagePromosiController::class, 'destroy'])->name('managePromosi.destroy');
 });
 
 Route::middleware('auth')->group(function () {

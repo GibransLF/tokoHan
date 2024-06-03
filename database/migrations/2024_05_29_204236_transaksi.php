@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status_rental');
             $table->decimal('dp_dibayarkan', 10, 2);
             $table->decimal('harga_total', 10, 2);
+            $table->decimal('denda', 10, 2);
             $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('member');
@@ -29,14 +30,19 @@ return new class extends Migration
 
         Schema::create('detail_transaksi', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('member_id');
             $table->unsignedBigInteger('stok_id');
+            $table->unsignedBigInteger('produk_id');
             $table->unsignedBigInteger('transaksi_id');
             $table->string('nama_produk');
             $table->integer('qty');
+            $table->decimal('diskon_at')->default(0);
             $table->decimal('harga_at', 10, 2);
             $table->timestamps();
 
+            $table->foreign('member_id')->references('id')->on('member');
             $table->foreign('stok_id')->references('id')->on('stok');
+            $table->foreign('produk_id')->references('id')->on('produk');
             $table->foreign('transaksi_id')->references('id')->on('transaksi');
         });
     }
