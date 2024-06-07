@@ -52,7 +52,7 @@
                                 {{ $stok -> ukuran }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ $stok -> stok }}
+                                {{ $stok->stok_total - $stok->stok }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $stok -> stok_total }}

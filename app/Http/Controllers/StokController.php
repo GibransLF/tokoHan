@@ -32,11 +32,10 @@ class StokController extends Controller
     {
         $data = $request->validate([
             'ukuran' => 'required|string|max:50',
-            'stok' => 'required|integer|min:0',
+            'stok_total' => 'required|integer|min:0',
             'harga' => 'required|numeric|min:0',
         ]);
 
-        $data["stok_total"] = $data["stok"];
         $data["produk_id"] = $request->produk_id;
 
         if(Stok::create($data)){
@@ -82,7 +81,7 @@ class StokController extends Controller
 
         $data = $request->validate([
             'ukuran' => 'required|string|max:50',
-            'stok' => 'required|integer|min:0',
+            'stok_total' => 'required|integer|min:0',
             'harga' => 'required|numeric|min:0',
         ]);
         if($stok->update($data)){

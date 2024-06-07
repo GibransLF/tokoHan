@@ -39,7 +39,7 @@ class ManageProdukController extends Controller
             'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'deskripsi' => 'required|string',
             'ukuran.*' => 'string|max:50',
-            'stok.*' => 'integer|min:0',
+            'stok_total.*' => 'integer|min:0',
             'harga.*' => 'numeric|min:0',
         ]);
 
@@ -56,8 +56,7 @@ class ManageProdukController extends Controller
                 $stok = new Stok();
                 $stok->produk_id = $produk->id;
                 $stok->ukuran = $ukuran;
-                $stok->stok = $request->stok[$index];
-                $stok->stok_total = $request->stok[$index];
+                $stok->stok_total = $request->stok_total[$index];
                 $stok->harga = $request->harga[$index];
                 $stok->save();
             }

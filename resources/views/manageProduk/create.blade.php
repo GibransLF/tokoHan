@@ -48,7 +48,7 @@
                                         Ukuran
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Stok
+                                        Stok Total
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Harga
@@ -68,7 +68,7 @@
                                         <input type="text" class="w-full block mb-2 text-sm font-medium text-gray-900 dark:text-white" name="ukuran[]">
                                     </td>
                                     <td class="px-6 py-3">
-                                        <input type="number" class="w-full block mb-2 text-sm font-medium text-gray-900 dark:text-white" name="stok[]" min="0">
+                                        <input type="number" class="w-full block mb-2 text-sm font-medium text-gray-900 dark:text-white" name="stok_total[]" min="0">
                                     </td>
                                     <td class="px-6 py-3">
                                         <input type="number" class="w-full block mb-2 text-sm font-medium text-gray-900 dark:text-white" name="harga[]" min="0">

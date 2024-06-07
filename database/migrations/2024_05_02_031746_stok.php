@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('stok', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('produk_id');
-            $table->integer('stok')->unsigned();
+            $table->integer('stok')->unsigned()->default(0);
             $table->integer('stok_total')->unsigned();
             $table->string('ukuran');
             $table->decimal('harga', 10, 2);

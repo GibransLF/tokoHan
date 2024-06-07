@@ -50,7 +50,7 @@
                         <div class="w-full ps-3">
                             <span class="text-sm text-gray-900 dark:text-gray-800 mx-1 mb-1" x-text="item.kodeProduk +' - '+ item.namaProduk +' - '+ item.ukuran"></span>
                             <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400 mx-1 flex items-center space-x-2">
-                                <span class="text-gray-800 flex-grow-[2]" x-text="parseFloat((item.harga-item.diskon)*item.qty).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                <span class="text-gray-800 flex-grow-[2]" x-text="parseFloat((item.harga-(item.harga*item.diskon))*item.qty).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
                                 <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow" @click="remove(item)">
                                     <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
@@ -64,12 +64,20 @@
                                 </button>
                             </div>
                             <template x-if="item.diskon == 0">
-                                <span class="text-xs text-gray-600 dark:text-gray-500 mx-1" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                <div class="flex justify-between mr-1">
+                                    <span class="text-xs text-gray-600 dark:text-gray-500 mx-1" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                    <span class="text-xs text-gray-600 dark:text-gray-500 mx-1" x-text="'Max Qty: ' + item.stok"></span>
+                                </div>
                             </template>
                             <template x-if="item.diskon > 0">
-                                <div>
-                                    <span class="text-xs text-gray-600 dark:text-gray-500 mx-1 line-through" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
-                                    <span class="text-xs text-gray-600 dark:text-gray-500 mx-1 text-green-500" x-text="parseFloat(item.harga - item.diskon).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                <div class="flex justify-between mr-1">
+                                    <div>
+                                        <span class="text-xs text-gray-600 dark:text-gray-500 mx-1 line-through" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                        <span class="text-xs text-green-500 dark:text-gray-500 mx-1" x-text="parseFloat(item.harga - (item.harga*item.diskon)).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                    </div>
+                                    <div>
+                                        <span class="text-xs text-gray-600 dark:text-gray-500 mx-1" x-text="'Max Qty: ' + item.stok"></span>
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -241,7 +249,7 @@
                                                     @endphp
                                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                            {{$stok->stok}}
+                                                            {{$stok->stok_total - $stok->stok}}
                                                             </th>
                                                             <td class="px-6 py-4">
                                                                 {{$stok->ukuran}}
@@ -262,9 +270,9 @@
                                                                 namaProduk: '{{$produk->nama}}',
                                                                 gambarProduk: '{{$produk->gambar}}',
                                                                 ukuran: '{{$stok->ukuran}}',
-                                                                stok: '{{$stok->stok}}',
+                                                                stok: '{{$stok->stok_total - $stok->stok}}',
                                                                 harga: '{{$stok->harga}}',
-                                                                diskon: '{{ $diskonTotal}}',
+                                                                diskon: '{{ $diskon }}',
                                                             })" data-modal-hide="authentication-modal{{$produk->id}}">
                                                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"/>
@@ -340,7 +348,7 @@
                     if(!findItem){
                         this.items.push({...newItem, qty: 1});
                         this.totalQty++;
-                        this.hargaTotal += parseFloat(newItem.harga - newItem.diskon);
+                        this.hargaTotal += parseFloat(newItem.harga - (newItem.harga*newItem.diskon));
                     }
                     else{
                         if(findItem.qty > findItem.stok - 1){
@@ -349,7 +357,7 @@
                         else{
                             findItem.qty += 1;
                             this.totalQty++;
-                            this.hargaTotal += parseFloat(newItem.harga - newItem.diskon);
+                            this.hargaTotal += parseFloat(findItem.harga - (findItem.harga*findItem.diskon));
                             console.log("nambah");
                         }
                     }
@@ -369,12 +377,12 @@
                 const findItem = this.items.find((item) => item.id == itemRemove.id)
                 if(findItem.qty <= 1 ){
                     this.totalQty--;
-                    this.hargaTotal -= parseFloat(itemRemove.harga - itemRemove.diskon);
+                    this.hargaTotal -= parseFloat(itemRemove.harga - (itemRemove.harga*itemRemove.diskon));
                     this.items = this.items.filter((item) => item.id != itemRemove.id);
                 }
                 else{
                     itemRemove.qty --;
-                    this.hargaTotal -= parseFloat(itemRemove.harga - itemRemove.diskon);
+                    this.hargaTotal -= parseFloat(itemRemove.harga - (itemRemove.harga*itemRemove.diskon));
                     this.totalQty--;
                 }
                 

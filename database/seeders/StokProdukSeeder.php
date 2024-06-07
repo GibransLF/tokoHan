@@ -28,7 +28,6 @@ class StokProdukSeeder extends Seeder
         //stok
         DB::table('stok')->insert([
             'produk_id' => '1',
-            'stok' => '64',
             'stok_total' => '64',
             'ukuran' => 'L',
             'harga' => '50000',
@@ -38,7 +37,6 @@ class StokProdukSeeder extends Seeder
         ]);
         DB::table('stok')->insert([
             'produk_id' => '1',
-            'stok' => '64',
             'stok_total' => '64',
             'ukuran' => 'XL',
             'harga' => '100000',
