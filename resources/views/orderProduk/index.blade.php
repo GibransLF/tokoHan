@@ -50,7 +50,7 @@
                         <div class="w-full ps-3">
                             <span class="text-sm text-gray-900 dark:text-gray-800 mx-1 mb-1" x-text="item.kodeProduk +' - '+ item.namaProduk +' - '+ item.ukuran"></span>
                             <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400 mx-1 flex items-center space-x-2">
-                                <span class="text-gray-800 flex-grow-[2]" x-text="parseFloat(item.harga*item.qty).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                <span class="text-gray-800 flex-grow-[2]" x-text="parseFloat((item.harga-item.diskon)*item.qty).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
                                 <button type="button" class="flex justify-center items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-300 dark:focus:ring-gray-800 p-1 flex-grow" @click="remove(item)">
                                     <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"/>
@@ -63,7 +63,15 @@
                                     </svg>
                                 </button>
                             </div>
-                            <div class="text-xs text-gray-600 dark:text-gray-500 mx-1" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></div>
+                            <template x-if="item.diskon == 0">
+                                <span class="text-xs text-gray-600 dark:text-gray-500 mx-1" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                            </template>
+                            <template x-if="item.diskon > 0">
+                                <div>
+                                    <span class="text-xs text-gray-600 dark:text-gray-500 mx-1 line-through" x-text="parseFloat(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                    <span class="text-xs text-gray-600 dark:text-gray-500 mx-1 text-green-500" x-text="parseFloat(item.harga - item.diskon).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })"></span>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -162,7 +170,6 @@
                         <x-slot:kode>{{ $produk -> kode }}</x-slot:kode>
                         <x-slot:nama>{{ $produk -> nama }}</x-slot:nama>
                         <x-slot:deskripsi>{{ $produk -> deskripsi }}</x-slot:deskripsi>
-
                     @php
                         $harga = $hargaView->get($produk->id)['hargaMin'] ?? null;
                         if(empty($harga)){
@@ -179,7 +186,16 @@
                         </x-slot>
                         <x-slot:hargaMin> {{$hargaMin}} </x-slot:hargaMin>
 
-                        <button data-modal-target="authentication-modal{{$produk->id}}" data-modal-toggle="authentication-modal{{$produk->id}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to Cart</button>
+                        <button data-modal-target="authentication-modal{{$produk->id}}" data-modal-toggle="authentication-modal{{$produk->id}}" class="relative inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <span>Add to Cart</span>
+                            @if(isset($promosiView->get($produk->id)['diskon']))
+                            <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                                <svg class="w-6 h-6 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.891 15.107 15.11 8.89m-5.183-.52h.01m3.089 7.254h.01M14.08 3.902a2.849 2.849 0 0 0 2.176.902 2.845 2.845 0 0 1 2.94 2.94 2.849 2.849 0 0 0 .901 2.176 2.847 2.847 0 0 1 0 4.16 2.848 2.848 0 0 0-.901 2.175 2.843 2.843 0 0 1-2.94 2.94 2.848 2.848 0 0 0-2.176.902 2.847 2.847 0 0 1-4.16 0 2.85 2.85 0 0 0-2.176-.902 2.845 2.845 0 0 1-2.94-2.94 2.848 2.848 0 0 0-.901-2.176 2.848 2.848 0 0 1 0-4.16 2.849 2.849 0 0 0 .901-2.176 2.845 2.845 0 0 1 2.941-2.94 2.849 2.849 0 0 0 2.176-.901 2.847 2.847 0 0 1 4.159 0Z"/>
+                                </svg>
+                            </div>
+                            @endif
+                        </button>
 
                         <!-- Main modal -->
                         <div id="authentication-modal{{$produk->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -219,6 +235,10 @@
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($produk->stoks as $stok)
+                                                    @php
+                                                        $diskon = $stok->currentDiscount ? $stok->currentDiscount->diskon : 0;
+                                                        $diskonTotal = $stok->harga * $diskon;
+                                                    @endphp
                                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                             {{$stok->stok}}
@@ -227,7 +247,12 @@
                                                                 {{$stok->ukuran}}
                                                             </td>
                                                             <td class="px-6 py-4">
-                                                                {{$stok->harga}}
+                                                                @if($diskon > 0)
+                                                                <span class="line-through">Rp.{{number_format($stok->harga, 2, ',', '.') }}</span>
+                                                                <span class="text-green-500">Rp.{{ number_format($stok->harga - $diskonTotal, 2, ',', '.') }}</span>
+                                                                @else
+                                                                Rp.{{number_format($stok->harga, 2, ',', '.') }}
+                                                                @endif
                                                         </td>
                                                         <td class="px-6 py-4 text-right">
                                                             <a href="#" @click="addToCart({
@@ -237,7 +262,9 @@
                                                                 namaProduk: '{{$produk->nama}}',
                                                                 gambarProduk: '{{$produk->gambar}}',
                                                                 ukuran: '{{$stok->ukuran}}',
+                                                                stok: '{{$stok->stok}}',
                                                                 harga: '{{$stok->harga}}',
+                                                                diskon: '{{ $diskonTotal}}',
                                                             })" data-modal-hide="authentication-modal{{$produk->id}}">
                                                                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"/>
@@ -297,6 +324,7 @@
             },
 
             addToCart(newItem){
+            console.log(this.items);
                 if(this.member === 0){
                     alert("Pilih Member Dahulu di Tombol Cart");
                 }
@@ -309,12 +337,18 @@
                     if(!findItem){
                         this.items.push({...newItem, qty: 1});
                         this.totalQty++;
-                        this.hargaTotal += parseFloat(newItem.harga);
+                        this.hargaTotal += parseFloat(newItem.harga - newItem.diskon);
                     }
                     else{
-                        findItem.qty += 1;
-                        this.totalQty++;
-                        this.hargaTotal += parseFloat(newItem.harga);
+                        if(findItem.qty > findItem.stok - 1){
+                            return;
+                        }
+                        else{
+                            findItem.qty += 1;
+                            this.totalQty++;
+                            this.hargaTotal += parseFloat(newItem.harga - newItem.diskon);
+                            console.log("nambah");
+                        }
                     }
     
                     if(this.totalQty == 0){
@@ -332,12 +366,12 @@
                 const findItem = this.items.find((item) => item.id == itemRemove.id)
                 if(findItem.qty <= 1 ){
                     this.totalQty--;
-                    this.hargaTotal -= parseFloat(itemRemove.harga);
+                    this.hargaTotal -= parseFloat(itemRemove.harga - itemRemove.diskon);
                     this.items = this.items.filter((item) => item.id != itemRemove.id);
                 }
                 else{
                     itemRemove.qty --;
-                    this.hargaTotal -= parseFloat(itemRemove.harga);
+                    this.hargaTotal -= parseFloat(itemRemove.harga - itemRemove.diskon);
                     this.totalQty--;
                 }
                 

@@ -70,7 +70,7 @@
                             </td>
                             <td class="px-6 py-4">
                                 <span class="line-through">
-                                    Rp.{{$promosi -> stok -> harga}}
+                                    Rp.{{number_format($promosi -> stok -> harga, 2, ',', '.') }}
                                 </span>
                                 &nbsp;
                                 <span class="text-green-500">

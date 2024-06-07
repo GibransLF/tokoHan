@@ -24,4 +24,16 @@ class Stok extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id', 'id');
     }
+    public function promosis()
+    {
+        return $this->hasMany(Promosi::class, 'stok_id');
+    }
+
+    public function currentDiscount()
+    {
+        return $this->hasOne(Promosi::class, 'stok_id')
+                    ->where('tgl_mulai', '<=', now()->toDateString())
+                    ->where('tgl_selesai', '>=', now()->toDateString())
+                    ->orderBy('tgl_mulai', 'desc');
+    }
 }

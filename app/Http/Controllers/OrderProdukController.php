@@ -7,6 +7,7 @@ use App\Models\Produk;
 use App\Models\Stok;
 use App\Models\Transaksi;
 use App\Models\DetailTansaksi;
+use App\Models\Promosi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,15 +21,23 @@ class OrderProdukController extends Controller
     {
         $members = Member::all();
 
-        $produks = Produk::where("hidden", false)->get();
-        $produks->load('stoks');
+        $produks = Produk::with(['stoks' => function ($query) {
+            $query->with(['currentDiscount']);
+        }])->where('hidden', false)->get();
 
         $hargaView = Stok::select('produk_id', DB::raw('MIN(harga) as hargaMin'))
                     ->groupBy('produk_id')
                     ->get()
                     ->keyBy("produk_id");
 
-        return view("orderProduk.index", compact("members", "produks", "hargaView"));
+        $promosiView = Promosi::select('produk_id', 'diskon')
+                        ->where('tgl_mulai', '<=', now()->toDateString())
+                        ->where('tgl_selesai', '>=', now()->toDateString())
+                        ->orderBy('tgl_mulai', 'desc')
+                        ->get()
+                        ->keyBy('produk_id');
+
+        return view("orderProduk.index", compact("members", "produks", "hargaView", "promosiView"));
     }
 
     /**

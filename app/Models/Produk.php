@@ -24,4 +24,8 @@ class Produk extends Model
     {
         return $this->hasMany(Stok::class, 'produk_id')->where('hidden', false);
     }
+    public function promosis()
+    {
+        return $this->hasMany(Promosi::class, 'produk_id');
+    }
 }
