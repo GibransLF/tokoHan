@@ -331,6 +331,9 @@
                 else if(this.rental_total + this.totalQty == this.rental_limit){
                     return;
                 }
+                else if(newItem.stok == 0){
+                    alert("stok kosong");
+                }
                 else{
                     const findItem = this.items.find((item) => item.id == newItem.id)
     
