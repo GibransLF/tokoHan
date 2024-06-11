@@ -23,6 +23,7 @@ class Transaksi extends Model
         'status_rental',
         'dp_dibayarkan',
         'harga_total',
+        'denda',
     ];
 
     public function detailsTransaksis()

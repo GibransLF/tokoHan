@@ -26,6 +26,11 @@
                         {{ __('Member') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('transaksi.index')" :active="request()->routeIs('transaksi.index')">
+                        {{ __('Transaksi') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -103,6 +108,9 @@
 
             <x-responsive-nav-link :href="route('member.index')" :active="request()->routeIs('member.index')">
                 {{ __('Member') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('transaksi.index')" :active="request()->routeIs('transaksi.index')">
+                {{ __('Transaksi') }}
             </x-responsive-nav-link>
         </div>
 

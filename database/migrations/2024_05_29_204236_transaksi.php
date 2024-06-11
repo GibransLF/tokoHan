@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('status_rental');
             $table->decimal('dp_dibayarkan', 10, 2);
             $table->decimal('harga_total', 10, 2);
-            $table->decimal('denda', 10, 2);
+            $table->decimal('denda', 10, 2)->default(0);
             $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('member');
@@ -34,7 +34,6 @@ return new class extends Migration
             $table->unsignedBigInteger('stok_id');
             $table->unsignedBigInteger('produk_id');
             $table->unsignedBigInteger('transaksi_id');
-            $table->string('nama_produk');
             $table->integer('qty');
             $table->decimal('diskon_at')->default(0);
             $table->decimal('harga_at', 10, 2);

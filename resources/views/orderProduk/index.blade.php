@@ -332,7 +332,6 @@
             },
 
             addToCart(newItem){
-            console.log(this.items);
                 if(this.member === 0){
                     alert("Pilih Member Dahulu di Tombol Cart");
                 }
@@ -358,7 +357,6 @@
                             findItem.qty += 1;
                             this.totalQty++;
                             this.hargaTotal += parseFloat(findItem.harga - (findItem.harga*findItem.diskon));
-                            console.log("nambah");
                         }
                     }
     
@@ -426,11 +424,11 @@
                     tgl_sewa: this.dateStart,
                     tgl_pengembalian: this.dateEnd,
                 }
-                console.log(form);
                 
                 axios.post('/orderProduk/store', form)
                 .then(function (response) {
-                    console.log(response);
+                    // console.log(response);
+                    window.location.href = '/orderProduk/success';
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -7,6 +7,7 @@ use App\Http\Controllers\ManageProdukController;
 use App\Http\Controllers\ManagePromosiController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\OrderProdukController;
+use App\Http\Controllers\TransaksiController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -72,8 +73,12 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/orderProduk', [OrderProdukController::class, 'index'])->name('orderProduk.index');
+    Route::get('/orderProduk/success', [OrderProdukController::class, 'success'])->name('orderProduk.success');
     Route::get('/orderProduk/{memberId}', [OrderProdukController::class, 'show'])->name('orderProduk.show');
     Route::post('/orderProduk/store', [OrderProdukController::class, 'store'])->name('orderProduk.store');
+});
+Route::middleware('auth')->group(function () {
+    Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
 });
 
 require __DIR__.'/auth.php';
