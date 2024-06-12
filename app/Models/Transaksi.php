@@ -26,12 +26,16 @@ class Transaksi extends Model
         'denda',
     ];
 
-    public function detailsTransaksis()
+    public function detailTransaksis()
     {
         return $this->hasMany(DetailTansaksi::class, 'transaksi_id');
     }
 
     public function member(){
         return $this->belongsTo(Member::class, 'member_id', 'id');
+    }
+    public function produk()
+    {
+        return $this->hasManyThrough(Produk::class, DetailTansaksi::class, 'transaksi_id', 'id', 'id', 'produk_id');
     }
 }

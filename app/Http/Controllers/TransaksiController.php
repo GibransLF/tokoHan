@@ -3,15 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Transaksi;
+use Illuminate\Auth\Events\Validated;
 
 class TransaksiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(request $request)
     {
-        return view("transaksi.index");
+        $nama = $request->input('nama','all');
+        $nama == '' ? $nama = 'all' : $nama;
+        $status = $request->input('status','all');
+        $perPage = 5;
+
+        $query = Transaksi::with(['member', 'produk'])->withCount('detailTransaksis');
+
+        if ($nama !== 'all') {
+            $query->whereHas('member', function ($query) use ($nama) {
+                $query->where('nama', 'like', '%' . $nama . '%');
+            });
+        }
+    
+        if ($status !== 'all') {
+            $query->where('status_rental', $status);
+        }
+        
+        $transaksis = $query->paginate($perPage);
+
+        return view("transaksi.index", compact("transaksis"));
     }
 
     /**

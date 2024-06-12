@@ -19,7 +19,7 @@ class DetailTansaksi extends Model
         'harga_at',
     ];
 
-    public function transaksis()
+    public function transaksi()
     {
         return $this->belongsTo(Transaksi::class, 'transaksi_id', 'id');
     }

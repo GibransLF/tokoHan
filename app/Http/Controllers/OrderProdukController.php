@@ -75,7 +75,7 @@ class OrderProdukController extends Controller
             'tgl_pengembalian' => 'required|date|after_or_equal:tgl_sewa',
         ]);
 
-        $uniqueCode = $cabang . $user_id . Carbon::now()->format('YmdHis') . $data['member'];
+        $uniqueCode = $cabang . $user_id .'D'. Carbon::now()->format('YmdHis') .'M'. $data['member'];
 
         $totalHarga = 0;
         foreach ($data['items'] as $item) {
