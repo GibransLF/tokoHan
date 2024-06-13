@@ -23,8 +23,12 @@ class DetailTansaksi extends Model
     {
         return $this->belongsTo(Transaksi::class, 'transaksi_id', 'id');
     }
-    public function stoks()
+    public function stok()
     {
         return $this->belongsTo(Stok::class, 'stok_id', 'id');
+    }
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'produk_id', 'id');
     }
 }

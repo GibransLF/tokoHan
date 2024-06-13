@@ -79,6 +79,10 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('/transaksi/detail/{kode_transaksi}', [TransaksiController::class, 'show'])->name('transaksi.detail');
+    Route::get('/transaksi/{kode_transaksi}/insiden', [TransaksiController::class, 'insiden'])->name('transaksi.insiden');
+    Route::patch('/transaksi/detail/{kode_transaksi}/canceled', [TransaksiController::class, 'canceled'])->name('transaksi.canceled');
+    Route::patch('/transaksi/detail/{kode_transaksi}/confirm', [TransaksiController::class, 'confirm'])->name('transaksi.confirm');
 });
 
 require __DIR__.'/auth.php';

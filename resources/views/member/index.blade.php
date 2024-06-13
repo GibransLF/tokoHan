@@ -33,6 +33,9 @@
                                     DP Limit
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Rental Total
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Rental Limit
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -54,6 +57,9 @@
                             </td>
                             <td class="px-6 py-4">
                                 {{ $member -> dp_limit * 100}}%
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $member -> rental_total }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $member -> rental_limit }}

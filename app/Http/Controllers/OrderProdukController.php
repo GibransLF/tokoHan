@@ -80,7 +80,7 @@ class OrderProdukController extends Controller
         $totalHarga = 0;
         foreach ($data['items'] as $item) {
             $totalDiskon = $item['harga'] * $item['diskon'];
-            $harga = $item['harga'] * $item['qty'] - $totalDiskon;
+            $harga = ($item['harga'] * $item['qty']) - ($totalDiskon * $item['qty']);
             $totalHarga += $harga;
         }
 

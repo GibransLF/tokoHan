@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Transaksi') }}
         </h2>
     </x-slot>
 
@@ -50,15 +50,15 @@
         </div>       
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 ">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100 justify-center"></div>
+                <div class="p-6 text-gray-900 dark:text-gray-100 justify-center">
                     @foreach ($transaksis as $transaksi)
-                    <a href="#" class="flex flex-col mb-4 items-center m-auto bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-3xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <a href="{{route("transaksi.detail", $transaksi->kode_transaksi)}}" class="flex flex-col mb-4 items-center m-auto bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-3xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                         <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="{{asset('storage/'.$transaksi->produk->first() -> gambar)}}" alt="">
                         <div class="flex flex-col justify-between p-4 leading-normal w-full">
                             <header>
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm font-bold tracking-tight text-gray-900 dark:text-white">{{$transaksi -> kode_transaksi}}</span>
-                                    @if ($transaksi -> status_rental == 'complated')
+                                    @if ($transaksi -> status_rental == 'completed')
                                         <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Selesai</span>
                                     @elseif ($transaksi -> status_rental == 'canceled')
                                         <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Dibatalkan</span>
@@ -71,22 +71,20 @@
                                 <hr class="h-px bg-gray-400 border-0 dark:bg-gray-700 mb-2">
                             </header>
                             <p class="text-gray-900 dark:text-gray-900 font-bold">Nama pemesan: {{$transaksi->member->nama}}</p>
-                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">+{{$transaksi -> detail_transaksis_count}} Barang lainnya</p>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">+{{$transaksi -> detail_transaksis_count}} Produk lainnya</p>
                             <span class="flex justify-end text-sm font-bold tracking-tight text-gray-900 dark:text-white">{{$transaksi -> tgl_sewa}} ~ {{$transaksi -> tgl_pengembalian}}</span>
                             <footer class="mt-1">
                             <hr class="h-px bg-gray-400 border-0 dark:bg-gray-700">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">Total harga </span>
-                                    <span class="text-sm text-gray-600 dark:text-gray-400 font-bold">Rp.{{number_format($transaksi -> harga_total, 2, ',', '.') }}</span>
+                                <div class="flex justify-between">
+                                    <div>
+                                        <span class="text-sm text-gray-600 dark:text-gray-400">Total Pembayaran </span>
+                                        <span class="text-sm text-gray-600 dark:text-gray-400 font-bold">Rp.{{number_format($transaksi->harga_total - $transaksi->dp_dibayarkan + $transaksi->denda, 2, ',', '.') }}</span>
+                                    </div>
+                                    <div>
+                                        <input disabled <?= ($transaksi->dp_dibayarkan > 0) ? 'checked' : '';  ?> id="disabled-checked-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="use DP" class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500">DP</label>
+                                    </div>
                                 </div>
-                                <div>
-                                    @if ($transaksi -> denda > 0)
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">Denda </span>
-                                    <span class="text-sm text-red-600 dark:text-red-400">Rp.{{number_format($transaksi -> denda, 2, ',', '.') }}</span>
-                                    @endif
-                                </div>
-                            </div>
                             </footer>
                         </div>
                     </a>
