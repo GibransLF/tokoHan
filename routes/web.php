@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AkunController;
+use App\Http\Controllers\InsidenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ManageProdukController;
 use App\Http\Controllers\ManagePromosiController;
@@ -77,6 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orderProduk/{memberId}', [OrderProdukController::class, 'show'])->name('orderProduk.show');
     Route::post('/orderProduk/store', [OrderProdukController::class, 'store'])->name('orderProduk.store');
 });
+
 Route::middleware('auth')->group(function () {
     Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('/transaksi/detail/{kode_transaksi}', [TransaksiController::class, 'show'])->name('transaksi.detail');
@@ -84,6 +86,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/transaksi/detail/{kode_transaksi}/storeInsiden', [TransaksiController::class, 'storeInsiden'])->name('transaksi.storeInsiden');
     Route::patch('/transaksi/detail/{kode_transaksi}/canceled', [TransaksiController::class, 'canceled'])->name('transaksi.canceled');
     Route::patch('/transaksi/detail/{kode_transaksi}/confirm', [TransaksiController::class, 'confirm'])->name('transaksi.confirm');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/insiden', [InsidenController::class, 'index'])->name('insiden.index');
 });
 
 require __DIR__.'/auth.php';
